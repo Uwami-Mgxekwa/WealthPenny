@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banking UI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* Reset styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Global styles */
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    /* Header styles */
+    header {
+      background-color: #007bff;
+      color: #fff;
+      padding: 1rem;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .logo img {
+      height: 40px;
+    }
+
+    .navigation ul {
+      display: flex;
+      list-style-type: none;
+    }
+
+    .navigation li a {
+      color: #fff;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .navigation li a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+    }
+
+    .user-profile img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+
+    /* Main content styles */
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .hero-content {
+      flex: 1;
+      margin-right: 2rem;
+    }
+
+    .hero-content h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero-content p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .cta-button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .cta-button:hover {
+      background-color: #0056b3;
+    }
+
+    .hero-image img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .accounts-section {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    .accounts-section h2 {
+      margin-bottom: 1rem;
+    }
+
+    .account-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-gap: 1.5rem;
+    }
+
+    .account-card {
+      background-color: #f5f5f5;
+      padding: 1.5rem;
+      border-radius: 4px;
+    }
+
+    .account-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .account-card .balance {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .view-details {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .view-details:hover {
+      background-color: #0056b3;
+    }
+
+    .transactions-section {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .transactions-section h2 {
+      margin-bottom: 1rem;
+    }
+
+    .transaction-list {
+      list-style-type: none;
+    }
+
+    .transaction-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .transaction-item:last-child {
+      border-bottom: none;
+    }
+
+    .transaction-details h3 {
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .transaction-details .date {
+      font-size: 0.9rem;
+      color: #828282;
+    }
+
+    .transaction-amount .amount {
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    .transaction-amount .category {
+      font-size: 0.9rem;
+      color: #828282;
+    }
+
+    /* Footer styles */
+    footer {
+      background-color: #007bff;
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div class="logo">
+        <img src="logo.svg" alt="Bank Logo">
+      </div>
+      <nav class="navigation">
+        <ul>
+          <li><a href="#">Accounts</a></li>
+          <li><a href="#">Transactions</a></li>
+          <li><a href="#">Payments</a></li>
+          <li><a href="#">Settings</a></li>
+        </ul>
+      </nav>
+      <div class="user-profile">
+        <img src="profile-pic.jpg" alt="User Profile Picture">
+        <span>John Doe</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Welcome to Your Banking Experience</h1>
+        <p>Manage your finances with ease and confidence.</p>
+        <button class="cta-button">Get Started</button>
+      </div>
+      <div class="hero-image">
+        <img src="hero-image.png" alt="Banking Illustration">
+      </div>
+    </section>
+
+    <section class="accounts-section">
+      <h2>Your Accounts</h2>
+      <div class="account-cards">
+        <div class="account-card">
+          <h3>Checking Account</h3>
+          <p class="balance">$5,243.78</p>
+          <button class="view-details">View Details</button>
+        </div>
+        <div class="account-card">
+          <h3>Savings Account</h3>
+          <p class="balance">$12,987.54</p>
+          <button class="view-details">View Details</button>
+        </div>
+        <div class="account-card">
+          <h3>Credit Card</h3>
+          <p class="balance">$1,234.56</p>
+          <button class="view-details">View Details</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="transactions-section">
+      <h2>Recent Transactions</h2>
+      <ul class="transaction-list">
+        <li class="transaction-item">
+          <div class="transaction-details">
+            <h3>Amazon.com</h3>
+            <p class="date">Dec 15, 2023</p>
+          </div>
+          <div class="transaction-amount">
+            <p class="amount">-$52.87</p>
+            <p class="category">Shopping</p>
+          </div>
+        </li>
+        <li class="transaction-item">
+          <div class="transaction-details">
+            <h3>Rent Payment</h3>
+            <p class="date">Dec 01, 2023</p>
+          </div>
+          <div class="transaction-amount">
+            <p class="amount">-$1,200.00</p>
+            <p class="category">Housing</p>
+          </div>
+        </li>
+        <li class="transaction-item">
+          <div class="transaction-details">
+            <h3>Paycheck</h3>
+            <p class="date">Nov 30, 2023</p>
+          </div>
+          <div class="transaction-amount">
+            <p class="amount">+$3,500.00</p>
+            <p class="category">Income</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2023 Bank Name. All rights reserved.</p>
+  </footer>
+</body>
+</html>
