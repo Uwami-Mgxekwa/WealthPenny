@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -42,31 +43,34 @@ public class wallet extends javax.swing.JFrame {
     int Dcount;
     int Scount;
     double Balance = loadCurrentBalance();
-    private String historyFilePath = "C:/Users/user/Desktop/JAVA/BANK/src/bank/history.txt";
 
-    
-    
-    
+    private final String historyFilePath = "data/history.txt";
+    private final String balanceFilePath = "data/balance.txt";
+
     private void saveCurrentBalance(double balance) {
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:/Users/user/Desktop/JAVA/BANK/src/bank/balance.txt"))) {
-        writer.write(String.valueOf(balance));
-    } catch (IOException e) {
-        System.out.println("An error occurred while saving the balance: " + e.getMessage());
-    }
-}
-    
-    private double loadCurrentBalance() {
-    double balance=0; // Default balance
-    try (BufferedReader reader = new BufferedReader(new FileReader("C:/Users/user/Desktop/JAVA/BANK/src/bank/balance.txt"))) {
-        String line = reader.readLine();
-        if (line != null) {
-            balance = Double.parseDouble(line);
+        try {
+            File file = new File(balanceFilePath);
+            file.getParentFile().mkdirs();
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                writer.write(String.valueOf(balance));
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred while saving the balance: " + e.getMessage());
         }
-    } catch (IOException e) {
-        System.out.println("An error occurred while loading the balance: " + e.getMessage());
     }
-    return balance;
-}
+
+    private double loadCurrentBalance() {
+        double balance = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader(balanceFilePath))) {
+            String line = reader.readLine();
+            if (line != null) {
+                balance = Double.parseDouble(line);
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred while loading the balance: " + e.getMessage());
+        }
+        return balance;
+    }
 
     
     private void loadAndDisplayCurrentBalance() { 
@@ -75,8 +79,27 @@ public class wallet extends javax.swing.JFrame {
         currentBalance.setText(displayAmount);
     } 
 
-    
-    
+
+    private void recordTransaction(String transactionDetail) {
+        try {
+            File file = new File(historyFilePath);
+            file.getParentFile().mkdirs(); // Ensure 'data' folder exists
+
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
+                // Get the current date and time
+                LocalDateTime now = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm");
+                String formattedDate = now.format(formatter);
+
+                // Write the transaction detail with the formatted date and time
+                bw.write(transactionDetail + " on " + formattedDate);
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing to history file: " + e.getMessage());
+        }
+    }
+
     
     
     
@@ -149,41 +172,7 @@ public class wallet extends javax.swing.JFrame {
     }*/
     
     
-    
-    private void recordTransaction(String transactionDetail) {
-    try {
-        FileWriter fw = new FileWriter("C:/Users/user/Desktop/JAVA/BANK/src/bank/history.txt", true); // Append mode
-        BufferedWriter bw = new BufferedWriter(fw);
 
-        // Get the current date and time
-        LocalDateTime now = LocalDateTime.now();
-        // Format the date and time
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm");
-        String formattedDate = now.format(formatter);
-
-        // Write the transaction detail with the formatted date and time
-        bw.write(transactionDetail + " on " + formattedDate);
-        bw.newLine();
-
-        bw.close();
-        fw.close();
-    } catch (IOException e) {
-        System.out.println("Error writing to history file: " + e.getMessage());
-    }
-}
-
-        
-  
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
