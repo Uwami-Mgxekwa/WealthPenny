@@ -25,6 +25,7 @@ public class checkLogin extends javax.swing.JFrame {
     public checkLogin() {
         initComponents();
         
+        
         Image icon = new ImageIcon(getClass().getResource("/bank/logo.png")).getImage();
         this.setIconImage(icon);
         

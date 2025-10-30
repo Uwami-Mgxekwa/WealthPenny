@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package bank;
 
 import java.awt.Color;
@@ -17,18 +13,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author user
- */
+
 public class dataBase extends javax.swing.JFrame {
 
-    /**
-     * Creates new form dataBase
-     */
     public dataBase() {
         initComponents();
-        Image icon = new ImageIcon("C:/Users/user/Desktop/JAVA/BANK/src/bank/logo.png").getImage();
+        Image icon = new ImageIcon(getClass().getResource("/bank/logo.png")).getImage();
         this.setIconImage(icon);
         updateTbl();
     }
@@ -309,7 +299,6 @@ public class dataBase extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
-        // TODO add your handling code here:
         int selectedRow = table.getSelectedRow(); // Get selected row index
         if (selectedRow != -1) { // Ensure a row is selected
             // Get values from the selected row
@@ -407,88 +396,52 @@ public class dataBase extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-        // Get values from the text fields
-    /*String username = txtUsername.getText();
-    String email = txtEmail.getText();
-    String password = txtPassword.getText();
+        String username = txtUsername.getText().trim();
+        String email = txtEmail.getText().trim();
+        String password = txtPassword.getText().trim();
 
-    // Validate inputs
-    if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Please fill in all fields.");
-        return;
-    }
-
-    // Add the new row to the table
-    DefaultTableModel model = (DefaultTableModel) table.getModel();
-    model.addRow(new Object[]{username, email, password});
-
-    // Clear the text fields after adding
-    txtUsername.setText("");
-    txtEmail.setText("");
-    txtPassword.setText("");
-
-    JOptionPane.showMessageDialog(this, "Row added successfully!");*/
-    
-    
-    
-    
-    
-    // Get values from the text fields
-    String username = txtUsername.getText().trim();
-    String email = txtEmail.getText().trim();
-    String password = txtPassword.getText().trim();
-
-    // Validate inputs
-    if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Please fill in all fields.");
-        return;
-    }
-
-    // Check for duplicate entries in the table
-    DefaultTableModel model = (DefaultTableModel) table.getModel();
-    for (int i = 0; i < model.getRowCount(); i++) {
-        String existingUsername = (String) model.getValueAt(i, 0);
-        String existingEmail = (String) model.getValueAt(i, 1);
-
-        if (existingUsername.equals(username) || existingEmail.equals(email)) {
-            JOptionPane.showMessageDialog(this, "Duplicate entry detected. Please use unique values.");
+        if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.");
             return;
         }
-    }
 
-    // Add the new row to the table
-    model.addRow(new Object[]{username, email, password});
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        for (int i = 0; i < model.getRowCount(); i++) {
+            String existingUsername = (String) model.getValueAt(i, 0);
+            String existingEmail = (String) model.getValueAt(i, 1);
 
-    // Save to file (append mode)
-    File file = new File("data/database.txt");
-    try {
-        file.getParentFile().mkdirs(); // Ensure 'data' folder exists
-        if (!file.exists()) {
-            file.createNewFile();
+            if (existingUsername.equals(username) || existingEmail.equals(email)) {
+                JOptionPane.showMessageDialog(this, "Duplicate entry detected. Please use unique values.");
+                return;
+            }
         }
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
-            bw.write(username + " " + email + " " + password);
-            bw.newLine();
+        model.addRow(new Object[]{username, email, password});
+
+        File file = new File("data/database.txt");
+        try {
+            file.getParentFile().mkdirs(); // Ensure 'data' folder exists
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
+                bw.write(username + " " + email + " " + password);
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error saving to file: " + e.getMessage());
+            return;
         }
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(this, "Error saving to file: " + e.getMessage());
-        return;
-    }
 
-    // Clear the text fields after adding
-    txtUsername.setText("");
-    txtEmail.setText("");
-    txtPassword.setText("");
+        txtUsername.setText("");
+        txtEmail.setText("");
+        txtPassword.setText("");
 
-    JOptionPane.showMessageDialog(this, "Row added and saved successfully!");
- 
+        JOptionPane.showMessageDialog(this, "Row added and saved successfully!");
+
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
