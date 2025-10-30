@@ -6,8 +6,10 @@ package bank;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.ImageIcon;
@@ -58,27 +60,31 @@ public class SignUp extends javax.swing.JFrame {
     
     
     private boolean userExists(String username, String email) {
-        DefaultTableModel tblModel = (DefaultTableModel) new dataBase().table.getModel();
-        for (int i = 0; i < tblModel.getRowCount(); i++) {
-            String existingUsername = tblModel.getValueAt(i, 0).toString();
-            String existingEmail = tblModel.getValueAt(i, 1).toString();
+    File file = new File(databaseFilePath);
 
-            // Check if the username or email already exists
-            if (existingUsername.equals(username) || existingEmail.equals(email)) {
-                return true;
-            }
-        }
-        return false;
+    if (!file.exists()) {
+        return false; // No users yet
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
+    try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] credentials = line.split(" ");
+            if (credentials.length >= 3) {
+                String existingUsername = credentials[0];
+                String existingEmail = credentials[1];
+                if (existingUsername.equals(username) || existingEmail.equals(email)) {
+                    return true;
+                }
+            }
+        }
+    } catch (IOException e) {
+        System.out.println("Error checking user existence: " + e.getMessage());
+    }
+
+    return false;
+}
+
     
 
     @SuppressWarnings("unchecked")
