@@ -32,21 +32,25 @@ public class SignUp extends javax.swing.JFrame {
     
 
     
+    private final String databaseFilePath = "data/database.txt";
+
     public void saveToFile(String username, String email, String password) {
-        String filePath = "C:\\Users\\user\\Desktop\\JAVA\\BANK\\src\\bank\\database.txt";
-        File file = new File(filePath);
+        File file = new File(databaseFilePath);
 
-        try (FileWriter fw = new FileWriter(file, true); // 'true' to append to the file
-             BufferedWriter bw = new BufferedWriter(fw)) {
+        try {
+            // Ensure folder and file exist
+            file.getParentFile().mkdirs();
+            if (!file.exists()) {
+                file.createNewFile();
+            }
 
-            // Write data from JTextField inputs
-            bw.write(username + " " + email + " " + password);
-            bw.newLine(); // Move to the next line after writing
-
-            bw.flush(); // Ensure data is written to the file
-            System.out.println("Data written successfully!");
-            new CheckInfo().setVisible(true);
-
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
+                bw.write(username + " " + email + " " + password);
+                bw.newLine();
+                bw.flush();
+                System.out.println("Data written successfully!");
+                new CheckInfo().setVisible(true);
+            }
         } catch (IOException ex) {
             System.out.println("An error occurred: " + ex.getMessage());
         }

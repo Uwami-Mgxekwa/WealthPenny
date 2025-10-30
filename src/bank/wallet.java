@@ -19,10 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author user
- */
+
 public class wallet extends javax.swing.JFrame {
 
     /**
@@ -57,14 +54,28 @@ public class wallet extends javax.swing.JFrame {
 
     private double loadCurrentBalance() {
         double balance = 0;
-        try (BufferedReader reader = new BufferedReader(new FileReader(balanceFilePath))) {
-            String line = reader.readLine();
-            if (line != null) {
-                balance = Double.parseDouble(line);
+        File file = new File("data/balance.txt");
+
+        try {
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                file.createNewFile();       
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                    writer.write("0.0");
+                }
+            }
+
+            // Read balance
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line = reader.readLine();
+                if (line != null) {
+                    balance = Double.parseDouble(line);
+                }
             }
         } catch (IOException e) {
             System.out.println("An error occurred while loading the balance: " + e.getMessage());
         }
+
         return balance;
     }
 

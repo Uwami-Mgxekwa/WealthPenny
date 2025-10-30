@@ -23,59 +23,67 @@ public class login extends javax.swing.JFrame {
         this.setIconImage(icon);
         
     }
+    private final String databaseFilePath = "data/database.txt";
     
     private void checkLogin() {
-        String username = txtUsername.getText();
-        String password = txtPassword.getText();
+        String username = txtUsername.getText().trim();
+        String password = txtPassword.getText().trim();
 
-        if(username.isBlank()){
+        if (username.isEmpty() || password.isEmpty()) {
             displayU.setText("Can't be empty");
             displayP.setText("Can't be empty");
-            displayU.setForeground(Color.red);
-            displayP.setForeground(Color.red);
+            displayU.setForeground(Color.RED);
+            displayP.setForeground(Color.RED);
+            return;
         }
-        else{
-            if (validateCredentials(username, password)) {
+
+        if (validateCredentials(username, password)) {
             displayU.setText("Login successful!");
-            displayU.setForeground(Color.GREEN);
             displayP.setText("Login successful!");
+            displayU.setForeground(Color.GREEN);
             displayP.setForeground(Color.GREEN);
             new checkLogin().setVisible(true);
             dispose();
-        } 
-         else {
+        } else {
             displayU.setText("Invalid username or password.");
-            displayU.setForeground(Color.RED);
             displayP.setText("Invalid username or password.");
+            displayU.setForeground(Color.RED);
             displayP.setForeground(Color.RED);
             new incorrectLogin().setVisible(true);
         }
     }
-    
-}
 
 
     private boolean validateCredentials(String username, String password) {
-    String filePath = "C:/Users/user/Desktop/JAVA/BANK/src/bank/database.txt"; 
+        File file = new File(databaseFilePath);
 
-    try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-        String line;
-        while ((line = br.readLine()) != null) {
-            String[] credentials = line.split(" "); // Split by space
-            if (credentials.length >= 3) { // Ensure there are at least 3 parts (username, email, password)
-                String storedUsername = credentials[0];
-                String storedPassword = credentials[2];
-                if (storedUsername.equals(username) && storedPassword.equals(password)) {
-                    return true;
+        try {
+            // Create file if missing
+            if (!file.exists()) {
+                file.getParentFile().mkdirs(); // Create 'data' folder
+                file.createNewFile();          // Create empty database.txt
+                return false; // No credentials to validate
+            }
+
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String[] credentials = line.split(" ");
+                    if (credentials.length >= 3) {
+                        String storedUsername = credentials[0];
+                        String storedPassword = credentials[2];
+                        if (storedUsername.equals(username) && storedPassword.equals(password)) {
+                            return true;
+                        }
+                    }
                 }
             }
+        } catch (IOException e) {
+            System.out.println("Error reading credentials: " + e.getMessage());
         }
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
 
-    return false;
-}
+        return false;
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
