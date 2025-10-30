@@ -7,8 +7,10 @@ package bank;
 import java.awt.Color;
 import java.awt.Image;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -32,35 +34,45 @@ public class dataBase extends javax.swing.JFrame {
     }
     
     
-    public void updateTbl(){
-        String filePath = "C:\\Users\\user\\Desktop\\JAVA\\BANK\\src\\bank\\database.txt";
-    File file = new File(filePath);
+    private final String databaseFilePath = "data/database.txt";
 
-    // Access the table's model
-    DefaultTableModel model = (DefaultTableModel) table.getModel(); // Make sure 'table' is accessible here
+    public void updateTbl() {
+        File file = new File(databaseFilePath);
 
-    try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-        String line;
+        // Access the table's model
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
 
-        // Clear existing rows in the table model
-        model.setRowCount(0);
-
-        while ((line = br.readLine()) != null) {
-            // Split each line by space (or adjust delimiter if needed)
-            String[] rowData = line.split(" ");
-            System.out.println("Loaded row: " + String.join(", ", rowData)); // Debugging line
-            if (rowData.length == model.getColumnCount()) { // Check if row data matches column count
-                model.addRow(rowData);
-            } else {
-                System.out.println("Skipping invalid row: " + line); // Debugging line
+        try {
+            // Ensure the file exists before reading
+            if (!file.exists()) {
+                file.getParentFile().mkdirs(); // Create 'data' folder if needed
+                file.createNewFile();          // Create empty database.txt
+                System.out.println("Created new database file: " + databaseFilePath);
+                return; // No data to load yet
             }
+
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                String line;
+
+                // Clear existing rows in the table model
+                model.setRowCount(0);
+
+                while ((line = br.readLine()) != null) {
+                    String[] rowData = line.split(" ");
+                    System.out.println("Loaded row: " + String.join(", ", rowData));
+
+                    if (rowData.length == model.getColumnCount()) {
+                        model.addRow(rowData);
+                    } else {
+                        System.out.println("Skipping invalid row: " + line);
+                    }
+                }
+
+                System.out.println("Data loaded successfully!");
+            }
+        } catch (IOException ex) {
+            System.out.println("An error occurred while loading data: " + ex.getMessage());
         }
-
-        System.out.println("Data loaded successfully!");
-
-    } catch (IOException ex) {
-        System.out.println("An error occurred while loading data: " + ex.getMessage());
-    }
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -423,9 +435,9 @@ public class dataBase extends javax.swing.JFrame {
     
     
     // Get values from the text fields
-    String username = txtUsername.getText();
-    String email = txtEmail.getText();
-    String password = txtPassword.getText();
+    String username = txtUsername.getText().trim();
+    String email = txtEmail.getText().trim();
+    String password = txtPassword.getText().trim();
 
     // Validate inputs
     if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
@@ -436,25 +448,41 @@ public class dataBase extends javax.swing.JFrame {
     // Check for duplicate entries in the table
     DefaultTableModel model = (DefaultTableModel) table.getModel();
     for (int i = 0; i < model.getRowCount(); i++) {
-        String existingUsername = (String) model.getValueAt(i, 0); // Column 0 is Username
-        String existingEmail = (String) model.getValueAt(i, 1);    // Column 1 is Email
+        String existingUsername = (String) model.getValueAt(i, 0);
+        String existingEmail = (String) model.getValueAt(i, 1);
 
         if (existingUsername.equals(username) || existingEmail.equals(email)) {
             JOptionPane.showMessageDialog(this, "Duplicate entry detected. Please use unique values.");
-            return; // Stop adding if a duplicate is found
+            return;
         }
     }
 
     // Add the new row to the table
     model.addRow(new Object[]{username, email, password});
 
+    // Save to file (append mode)
+    File file = new File("data/database.txt");
+    try {
+        file.getParentFile().mkdirs(); // Ensure 'data' folder exists
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
+            bw.write(username + " " + email + " " + password);
+            bw.newLine();
+        }
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Error saving to file: " + e.getMessage());
+        return;
+    }
+
     // Clear the text fields after adding
     txtUsername.setText("");
     txtEmail.setText("");
     txtPassword.setText("");
 
-
-    JOptionPane.showMessageDialog(this, "Row added successfully!");
+    JOptionPane.showMessageDialog(this, "Row added and saved successfully!");
  
     }//GEN-LAST:event_jButton5ActionPerformed
 

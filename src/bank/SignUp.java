@@ -28,7 +28,7 @@ public class SignUp extends javax.swing.JFrame {
      */
     public SignUp() {
         initComponents();
-        Image icon = new ImageIcon("C:/Users/user/Desktop/JAVA/BANK/src/bank/logo.png").getImage();
+        Image icon = new ImageIcon(getClass().getResource("/bank/logo.png")).getImage();
         this.setIconImage(icon);
     }
     

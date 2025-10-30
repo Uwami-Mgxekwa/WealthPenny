@@ -19,7 +19,7 @@ public class login extends javax.swing.JFrame {
     
     public login() {
         initComponents();
-        Image icon = new ImageIcon("C:/Users/user/Desktop/JAVA/BANK/src/bank/logo.png").getImage();
+        Image icon = new ImageIcon(getClass().getResource("/bank/logo.png")).getImage();
         this.setIconImage(icon);
         
     }
