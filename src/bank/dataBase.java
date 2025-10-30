@@ -420,7 +420,7 @@ public class dataBase extends javax.swing.JFrame {
 
         File file = new File("data/database.txt");
         try {
-            file.getParentFile().mkdirs(); // Ensure 'data' folder exists
+            file.getParentFile().mkdirs();
             if (!file.exists()) {
                 file.createNewFile();
             }

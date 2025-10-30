@@ -16,98 +16,82 @@ public class History extends javax.swing.JFrame {
 
     public History() {
         initComponents();
-        Image icon = new ImageIcon("C:/Users/user/Desktop/JAVA/BANK/src/bank/logo.png").getImage(); 
-        this.setIconImage(icon); 
+        Image icon = new ImageIcon(getClass().getResource("/bank/logo.png")).getImage();
+        this.setIconImage(icon);
         updateTbl();
         
     }
 
-    private DefaultTableModel model;
+    private final String historyFilePath = "data/history.txt";
 
     private void updateTbl() {
-    String filePath = "C:/Users/user/Desktop/JAVA/BANK/src/bank/history.txt";
-    File file = new File(filePath);
+        File file = new File(historyFilePath);
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
 
-    DefaultTableModel model = (DefaultTableModel) table.getModel(); // Make sure 'jTable1' is accessible here
-
-    try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-        String line;
-
-        model.setRowCount(0);
-
-        double balance = 0.0;
-
-        while ((line = br.readLine()) != null) {
-            System.out.println("Reading line: " + line);
-
-            String[] data = line.split(" on ");
-            if (data.length != 2) {
-                System.out.println("Invalid format: " + line); 
-                continue;
-            }
-            String transactionDetail = data[0];
-            String dateTime = data[1];
-
-            String[] transactionParts = transactionDetail.split(": ");
-            if (transactionParts.length != 2) {
-                System.out.println("Invalid transaction detail format: " + transactionDetail); 
-                continue;
-            }
-            String transactionType = transactionParts[0];
-            String amountStr = transactionParts[1].replace("R", ""); 
-            double amount = Double.parseDouble(amountStr);
-
-            String[] dateTimeParts = dateTime.split(" ");
-            if (dateTimeParts.length != 4) {
-                System.out.println("Invalid date-time format: " + dateTime); 
-                continue;
-            }
-            String date = dateTimeParts[0] + " " + dateTimeParts[1] + " " + dateTimeParts[2];
-            String time = dateTimeParts[3];
-
-            // Update balance based on transaction type
-            switch (transactionType) {
-                case "Deposit":
-                    balance += amount;
-                    break;
-                case "Withdrawal":
-                case "Send":
-                    balance -= amount;
-                    break;
+        try {
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                file.createNewFile();  
+                System.out.println("Created new history file: " + historyFilePath);
+                return;
             }
 
-            model.addRow(new Object[]{date, time, transactionType, amountStr, balance});
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                String line;
+                model.setRowCount(0);
+                double balance = 0.0;
+
+                while ((line = br.readLine()) != null) {
+                    System.out.println("Reading line: " + line);
+
+                    String[] data = line.split(" on ");
+                    if (data.length != 2) {
+                        System.out.println("Invalid format: " + line);
+                        continue;
+                    }
+
+                    String transactionDetail = data[0];
+                    String dateTime = data[1];
+
+                    String[] transactionParts = transactionDetail.split(": ");
+                    if (transactionParts.length != 2) {
+                        System.out.println("Invalid transaction detail format: " + transactionDetail);
+                        continue;
+                    }
+
+                    String transactionType = transactionParts[0];
+                    String amountStr = transactionParts[1].replace("R", "");
+                    double amount = Double.parseDouble(amountStr);
+
+                    String[] dateTimeParts = dateTime.split(" ");
+                    if (dateTimeParts.length != 4) {
+                        System.out.println("Invalid date-time format: " + dateTime);
+                        continue;
+                    }
+
+                    String date = dateTimeParts[0] + " " + dateTimeParts[1] + " " + dateTimeParts[2];
+                    String time = dateTimeParts[3];
+
+                    switch (transactionType) {
+                        case "Deposit":
+                            balance += amount;
+                            break;
+                        case "Withdrawal":
+                        case "Send":
+                            balance -= amount;
+                            break;
+                    }
+                    
+                    model.addRow(new Object[]{date, time, transactionType, amountStr, balance});
+                }
+
+                System.out.println("Data loaded successfully!");
+            }
+        } catch (IOException ex) {
+            System.out.println("An error occurred while loading data: " + ex.getMessage());
         }
-
-        System.out.println("Data loaded successfully!");
-
-    } catch (IOException ex) {
-        System.out.println("An error occurred while loading data: " + ex.getMessage());
     }
-}
 
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
