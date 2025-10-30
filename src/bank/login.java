@@ -58,11 +58,10 @@ public class login extends javax.swing.JFrame {
         File file = new File(databaseFilePath);
 
         try {
-            // Create file if missing
             if (!file.exists()) {
-                file.getParentFile().mkdirs(); // Create 'data' folder
-                file.createNewFile();          // Create empty database.txt
-                return false; // No credentials to validate
+                file.getParentFile().mkdirs(); 
+                file.createNewFile();
+                return false;
             }
 
             try (BufferedReader br = new BufferedReader(new FileReader(file))) {
